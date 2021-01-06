@@ -14,12 +14,13 @@ class TestWeatherApp(TestCase):
         self.temp = WeatherApp()
 
     @patch('src.weather.weather.requests.get')
-    def test_get_weather_by_city_name(self, mock_get):
+    def test_get_weather_by_city_name_succesful(self, mock_get):
         weather_warsaw = {
             "status": 200,
             "data": {
                 "city": "warsaw",
-                "weather": "not great tbh"
+                "weather": "rainy",
+                "temperature": "2C"
             }
         }
 
@@ -27,9 +28,25 @@ class TestWeatherApp(TestCase):
         mock_get.return_value.json.return_value = weather_warsaw
 
         response = self.temp.get_weather_by_city_name("warsaw")
-        print(mock_get)
+
         self.assertEqual(response.json(), weather_warsaw)
 
+    @patch('src.weather.weather.requests.get')
+    def test_get_weather_by_city_name_nonexistent_city(self, mock_get):
+        weather_warsaww = {
+            "status": 400,
+            "message": "Invalid city"
+        }
+
+        mock_get.return_value = Mock()
+        mock_get.return_value.json.return_value = weather_warsaww
+
+        response = self.temp.get_weather_by_city_name("warsaww")
+
+        self.assertEqual(response, None)
+
+    def tearDown(self):
+        self.temp = None
 
 if __name__ == '__main__':
     main()

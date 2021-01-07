@@ -79,7 +79,7 @@ class TestWeatherApp(TestCase):
             mock_get.return_value = Mock(status=200)
             mock_get.return_value.json.return_value = weather_coordinates
 
-            response = self.temp.get_weather_by_geo_coordinates_name(54.39630412430049, 18.574802995894267)
+            response = self.temp.get_weather_by_geo_coordinates(54.396, 18.574)
 
             self.assertEqual(response.json(), weather_coordinates)
 

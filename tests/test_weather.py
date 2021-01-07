@@ -24,7 +24,7 @@ class TestWeatherApp(TestCase):
             }
         }
 
-        mock_get.return_value = Mock(ok=True)
+        mock_get.return_value = Mock()
         mock_get.return_value.json.return_value = weather_warsaw
 
         response = self.temp.get_weather_by_city_name("warsaw")
@@ -44,6 +44,24 @@ class TestWeatherApp(TestCase):
         response = self.temp.get_weather_by_city_name("warsaww")
 
         self.assertEqual(response, None)
+
+    @patch('src.weather.weather.requests.get')
+    def test_get_weather_by_city_name_requests_get_should_be_called(self, mock_get):
+        weather_warsaw = {
+            "status": 200,
+            "data": {
+                "city": "warsaw",
+                "weather": "rainy",
+                "temperature": "2C"
+            }
+        }
+
+        mock_get.return_value = Mock()
+        mock_get.return_value.json.return_value = weather_warsaw
+
+        self.temp.get_weather_by_city_name("warsaw")
+
+        mock_get.assert_called_once()
 
     def tearDown(self):
         self.temp = None

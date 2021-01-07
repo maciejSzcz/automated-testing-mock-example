@@ -65,6 +65,24 @@ class TestWeatherApp(TestCase):
 
         mock_get.assert_called_once()
 
+    def test_get_weather_by_geo_coordinates_succesful(self):
+        with patch('src.weather.weather.requests.get') as mock_get:
+            weather_coordinates = {
+                "data": {
+                    "city": "Gdansk",
+                    "weather": "Broken Clouds",
+                    "temperature": "-4C",
+                    "wind_dir": "SW"
+                }
+            }
+
+            mock_get.return_value = Mock(status=200)
+            mock_get.return_value.json.return_value = weather_coordinates
+
+            response = self.temp.get_weather_by_geo_coordinates_name(54.39630412430049, 18.574802995894267)
+
+            self.assertEqual(response.json(), weather_coordinates)
+
     def tearDown(self):
         self.temp = None
 

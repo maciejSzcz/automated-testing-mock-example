@@ -83,6 +83,19 @@ class TestWeatherApp(TestCase):
 
             self.assertEqual(response.json(), weather_coordinates)
 
+    def test_get_weather_by_geo_coordinates_no_data_for_values(self):
+        with patch('src.weather.weather.requests.get') as mock_get:
+            weather_coordinates = {
+                "mesage": "No data found for given coordinates"
+            }
+
+            mock_get.return_value = Mock(status=404)
+            mock_get.return_value.json.return_value = weather_coordinates
+
+            response = self.temp.get_weather_by_geo_coordinates(48.276, -36.945)
+
+            self.assertEqual(response.json(), None)
+
     def test_get_weather_by_geo_coordinates_latitude_out_of_range(self):
         with self.assertRaisesRegexp(ValueError, "Latitude has to be between -90 and 90"):
             self.temp.get_weather_by_geo_coordinates(110.354, 12.453)

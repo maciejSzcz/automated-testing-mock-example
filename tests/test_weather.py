@@ -122,6 +122,10 @@ class TestWeatherApp(TestCase):
         with self.assertRaisesRegexp(ValueError, "Longitude has to be between -180 and 180"):
             self.temp.get_weather_by_geo_coordinates(32.354, -342.532)
 
+    def test_get_weather_by_geo_coordinates_coordinates_type_not_float(self):
+        with self.assertRaisesRegexp(TypeError, "Coordinates must be of float type"):
+            self.temp.get_weather_by_geo_coordinates(110, "123.432")
+
     def tearDown(self):
         self.temp = None
 

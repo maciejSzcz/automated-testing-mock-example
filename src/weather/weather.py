@@ -23,4 +23,7 @@ class WeatherApp(object):
 
         res = requests.get(self.base_url + "lat=" + str(lat) + "&lon=" + str(lon))
 
-        return res
+        if res.status != 200:
+            return None
+        else:
+            return res

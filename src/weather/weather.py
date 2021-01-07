@@ -16,6 +16,9 @@ class WeatherApp(object):
             return res
 
     def get_weather_by_geo_coordinates(self, lat, lon):
+        if lat > 90.000 or lat < -90.000:
+            raise ValueError("Latitude has to be between -90 and 90")
+        
         res = requests.get(self.base_url + "lat=" + str(lat) + "&lon=" + str(lon))
 
         return res

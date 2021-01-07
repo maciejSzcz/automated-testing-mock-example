@@ -96,6 +96,24 @@ class TestWeatherApp(TestCase):
 
             self.assertEqual(response, None)
 
+    def test_get_weather_by_geo_coordinates_requests_get_should_be_called(self):
+        with patch('src.weather.weather.requests.get') as mock_get:
+            weather_coordinates = {
+                "data": {
+                    "city": "Gdansk",
+                    "weather": "Broken Clouds",
+                    "temperature": "-4C",
+                    "wind_dir": "SW"
+                }
+            }
+
+            mock_get.return_value = Mock(status=200)
+            mock_get.return_value.json.return_value = weather_coordinates
+
+            self.temp.get_weather_by_geo_coordinates(54.396, 18.574)
+
+            mock_get.assert_called_once_with('api.myweatherapi.com/v1/lat=54.396&lon=18.574')
+
     def test_get_weather_by_geo_coordinates_latitude_out_of_range(self):
         with self.assertRaisesRegexp(ValueError, "Latitude has to be between -90 and 90"):
             self.temp.get_weather_by_geo_coordinates(110.354, 12.453)

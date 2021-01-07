@@ -83,6 +83,11 @@ class TestWeatherApp(TestCase):
 
             self.assertEqual(response.json(), weather_coordinates)
 
+    def test_get_weather_by_geo_coordinates_latitude_out_of_range(self):
+        with self.assertRaisesRegexp(ValueError, "Latitude has to be between -90 and 90"):
+            self.temp.get_weather_by_geo_coordinates(110.354, 12.453)
+
+
     def tearDown(self):
         self.temp = None
 

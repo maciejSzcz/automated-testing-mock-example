@@ -16,50 +16,52 @@ class TestWeatherApp(TestCase):
     @patch('src.weather.weather.requests.get')
     def test_get_weather_by_city_name_succesful(self, mock_get):
         weather_warsaw = {
-            "status": 200,
             "data": {
-                "city": "warsaw",
-                "weather": "rainy",
-                "temperature": "2C"
+                "city": "Warsaw",
+                "weather": "Rainy",
+                "temperature": "2C",
+                "wind_dir": "NE"
             }
         }
 
-        mock_get.return_value = Mock()
+        mock_get.return_value = Mock(status=200)
         mock_get.return_value.json.return_value = weather_warsaw
 
-        response = self.temp.get_weather_by_city_name("warsaw")
+        response = self.temp.get_weather_by_city_name("Warsaw")
 
         self.assertEqual(response.json(), weather_warsaw)
 
     @patch('src.weather.weather.requests.get')
     def test_get_weather_by_city_name_nonexistent_city(self, mock_get):
         weather_warsaww = {
-            "status": 400,
             "message": "Invalid city"
         }
 
-        mock_get.return_value = Mock()
+        mock_get.return_value = Mock(status=404)
         mock_get.return_value.json.return_value = weather_warsaww
 
         response = self.temp.get_weather_by_city_name("warsaww")
 
         self.assertEqual(response, None)
 
+    def test_get_weather_by_city_name_city_type_not_str(self):
+        self.assertRaises(TypeError, self.temp.get_weather_by_city_name, 123)
+
     @patch('src.weather.weather.requests.get')
     def test_get_weather_by_city_name_requests_get_should_be_called(self, mock_get):
         weather_warsaw = {
-            "status": 200,
             "data": {
-                "city": "warsaw",
-                "weather": "rainy",
-                "temperature": "2C"
+                "city": "Warsaw",
+                "weather": "Rainy",
+                "temperature": "2C",
+                "wind_dir": "NE"
             }
         }
 
-        mock_get.return_value = Mock()
+        mock_get.return_value = Mock(status=200)
         mock_get.return_value.json.return_value = weather_warsaw
 
-        self.temp.get_weather_by_city_name("warsaw")
+        self.temp.get_weather_by_city_name("Warsaw")
 
         mock_get.assert_called_once()
 

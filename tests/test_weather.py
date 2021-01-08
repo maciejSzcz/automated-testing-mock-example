@@ -12,12 +12,14 @@ class TestWeatherApp(TestCase):
     @patch('src.weather.weather.requests.get')
     def test_get_weather_by_city_name_succesful(self, mock_get):
         weather_warsaw = {
-            "data": {
-                "city": "Warsaw",
-                "weather": "Rainy",
-                "temperature": "2C",
-                "wind_dir": "NE"
-            }
+            "data": [
+                {
+                    "city": "Warsaw",
+                    "weather": "Rainy",
+                    "temperature": "2C",
+                    "wind_dir": "NE"
+                }
+            ]
         }
 
         mock_get.return_value = Mock(status=200)
@@ -46,12 +48,14 @@ class TestWeatherApp(TestCase):
     @patch('src.weather.weather.requests.get')
     def test_get_weather_by_city_name_requests_get_should_be_called(self, mock_get):
         weather_warsaw = {
-            "data": {
-                "city": "Warsaw",
-                "weather": "Rainy",
-                "temperature": "2C",
-                "wind_dir": "NE"
-            }
+            "data": [
+                {
+                    "city": "Warsaw",
+                    "weather": "Rainy",
+                    "temperature": "2C",
+                    "wind_dir": "NE"
+                }
+            ]
         }
 
         mock_get.return_value = Mock(status=200)
@@ -61,15 +65,49 @@ class TestWeatherApp(TestCase):
 
         mock_get.assert_called_once()
 
+    @patch('src.weather.weather.requests.get')
+    def test_get_weather_for_cities_by_name_succesful(self, mock_get):
+        weather_cities = {
+            "data": [
+                {
+                    "city": "Warsaw",
+                    "weather": "Rainy",
+                    "temperature": "2C",
+                    "wind_dir": "NE"
+                },
+                {
+                    "city": "Wroclaw",
+                    "weather": "Clear sky",
+                    "temperature": "4C",
+                    "wind_dir": "SW"
+                },
+                {
+                    "city": "Gdansk",
+                    "weather": "Snow storm",
+                    "temperature": "-3C",
+                    "wind_dir": "NE"
+                }
+            ]
+        }
+
+        mock_get.return_value = Mock(status=200)
+        mock_get.return_value.json.return_value = weather_cities
+
+        response = self.temp.get_weather_for_cities_by_name("Warsaw", "Wroclaw", "Gdansk")
+
+        self.assertEqual(response.json(), weather_cities)
+
     def test_get_weather_by_geo_coordinates_succesful(self):
         with patch('src.weather.weather.requests.get') as mock_get:
             weather_coordinates = {
-                "data": {
-                    "city": "Gdansk",
-                    "weather": "Broken Clouds",
-                    "temperature": "-4C",
-                    "wind_dir": "SW"
-                }
+                "data": [
+                    {
+                        "city": "Gdansk",
+                        "weather": "Broken Clouds",
+                        "temperature": "-4C",
+                        "wind_dir": "SW"
+                    }
+                ]
             }
 
             mock_get.return_value = Mock(status=200)
@@ -95,12 +133,14 @@ class TestWeatherApp(TestCase):
     def test_get_weather_by_geo_coordinates_requests_get_should_be_called(self):
         with patch('src.weather.weather.requests.get') as mock_get:
             weather_coordinates = {
-                "data": {
-                    "city": "Gdansk",
-                    "weather": "Broken Clouds",
-                    "temperature": "-4C",
-                    "wind_dir": "SW"
-                }
+                "data": [
+                    {
+                        "city": "Gdansk",
+                        "weather": "Broken Clouds",
+                        "temperature": "-4C",
+                        "wind_dir": "SW"
+                    }
+                ]
             }
 
             mock_get.return_value = Mock(status=200)
@@ -125,12 +165,14 @@ class TestWeatherApp(TestCase):
     def test_get_weather_by_zip_code_pl_succesful(self):
         with patch('src.weather.weather.requests.get') as mock_get:
             weather_coordinates = {
-                "data": {
-                    "city": "Gizycko",
-                    "weather": "Sunny",
-                    "temperature": "21C",
-                    "wind_dir": "SW"
-                }
+                "data": [
+                    {
+                        "city": "Gizycko",
+                        "weather": "Sunny",
+                        "temperature": "21C",
+                        "wind_dir": "SW"
+                    }
+                ]
             }
 
             mock_get.return_value = MagicMock(status=200)

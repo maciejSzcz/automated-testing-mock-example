@@ -29,3 +29,11 @@ class WeatherApp(object):
             return None
         else:
             return res
+
+    def get_weather_by_zip_code_pl(self, zip_code):
+        res = requests.get(self.base_url + "zip=" + zip_code)
+
+        if res.status != 200:
+            return None
+        else:
+            return res

@@ -15,6 +15,13 @@ class WeatherApp(object):
         else:
             return res
 
+    def get_weather_for_cities_by_name(self, *city_names):
+        cities_str = ','.join(city_names)
+
+        res = requests.get(self.base_url + "cities=" + cities_str)
+
+        return res
+
     def get_weather_by_geo_coordinates(self, lat, lon):
         if type(lat) != float or type(lon) != float:
             raise TypeError("Coordinates must be of float type")

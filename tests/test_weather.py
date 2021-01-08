@@ -1,9 +1,5 @@
-# the inclusion of the tests module is not meant to offer best practices for
-# testing in general, but rather to support the `find_packages` example in
-# setup.py that excludes installing the "tests" package
-
 from unittest import TestCase, main
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, MagicMock
 import unittest
 
 from src.weather.weather import WeatherApp
@@ -125,6 +121,24 @@ class TestWeatherApp(TestCase):
     def test_get_weather_by_geo_coordinates_coordinates_type_not_float(self):
         with self.assertRaisesRegexp(TypeError, "Coordinates must be of float type"):
             self.temp.get_weather_by_geo_coordinates(110, "123.432")
+
+    def test_get_weather_by_zip_code_pl_succesful(self):
+        with patch('src.weather.weather.requests.get') as mock_get:
+            weather_coordinates = {
+                "data": {
+                    "city": "Gizycko",
+                    "weather": "Sunny",
+                    "temperature": "21C",
+                    "wind_dir": "SW"
+                }
+            }
+
+            mock_get.return_value = MagicMock(status=200)
+            mock_get.return_value.json.return_value.__contains__.return_value = True
+
+            response = self.temp.get_weather_by_zip_code_pl("11-500")
+
+            self.assertTrue(weather_coordinates in response.json())
 
     def tearDown(self):
         self.temp = None

@@ -45,7 +45,9 @@ class WeatherApp(object):
     def get_weather_by_zip_code_pl(self, zip_code):
         format_regexp = re.compile(r"^[0-9]{2}-[0-9]{3}$")
 
-        if not format_regexp.match(zip_code):
+        if type(zip_code) != str:
+            raise TypeError("Zip code must be of string type")
+        elif not format_regexp.match(zip_code):
             raise ValueError("Zip code must be formated like XX-XXX")
 
         res = requests.get(self.base_url + "zip=" + zip_code)

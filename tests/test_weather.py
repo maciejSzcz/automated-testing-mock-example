@@ -124,6 +124,13 @@ class TestWeatherApp(TestCase):
         self.assertEqual(response.json(), weather_cities)
 
     @patch('src.weather.weather.requests.get')
+    def test_while_get_weather_for_cities_by_name_requests_get_is_called(self, spy_get):
+        self.temp.get_weather_for_cities_by_name("Warsaw", "Wroclaw", "Gdansk")
+
+        spy_get.assert_called_once_with('api.myweatherapi.com/v1/cities=Warsaw,Wroclaw,Gdansk')
+
+
+    @patch('src.weather.weather.requests.get')
     def test_get_weather_for_cities_by_name_no_city_valid(self, mock_get):
         weather_cities = {
             "message": "Invalid cities"
@@ -244,8 +251,6 @@ class TestWeatherApp(TestCase):
 
     def test_while_get_weather_by_zip_code_pl_requests_get_is_called(self):
         with patch('src.weather.weather.requests.get') as spy_get:
-            spy_get.return_value = Mock()
-
             self.temp.get_weather_by_zip_code_pl("11-500")
 
             spy_get.assert_called_once_with('api.myweatherapi.com/v1/zip=11-500')

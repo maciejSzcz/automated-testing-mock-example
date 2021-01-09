@@ -21,6 +21,9 @@ class WeatherApp(object):
             return res
 
     def get_weather_for_cities_by_name(self, *city_names):
+        if len(city_names) == 0:
+            raise ValueError("Cities must be provided")
+
         cities_str = ','.join(city_names)
 
         res = requests.get(self.base_url + "cities=" + cities_str)

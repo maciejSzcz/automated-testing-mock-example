@@ -25,8 +25,7 @@ class WeatherApp(object):
 
         res = requests.get(self.base_url + "cities=" + cities_str)
 
-
-        if res.status != 200:
+        if res.status != 200 and res.status != 206:
             return None
         else:
             return res

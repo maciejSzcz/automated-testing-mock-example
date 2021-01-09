@@ -199,9 +199,13 @@ class TestWeatherApp(TestCase):
         with self.assertRaisesRegexp(ValueError, "Zip code must be formated like XX-XXX"):
             self.temp.get_weather_by_zip_code_pl("1234-39")
 
+    def test_get_weather_by_zip_code_pl_raises_type_error_with_not_string(self):
+        with self.assertRaisesRegexp(TypeError, "Zip code must be of string type"):
+            self.temp.get_weather_by_zip_code_pl(12345)
+
     def test_while_get_weather_by_zip_code_pl_requests_get_is_called(self):
         with patch('src.weather.weather.requests.get') as spy_get:
-            spy_get.return_value = Mock(status=200)
+            spy_get.return_value = Mock()
 
             self.temp.get_weather_by_zip_code_pl("11-500")
 

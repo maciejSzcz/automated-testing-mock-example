@@ -182,6 +182,19 @@ class TestWeatherApp(TestCase):
 
             self.assertTrue(weather_coordinates in response.json())
 
+    def test_get_weather_by_by_zip_code_pl_no_data_for_zip_code(self):
+        with patch('src.weather.weather.requests.get') as mock_get:
+            weather_coordinates = {
+                "mesage": "No data found for given zip code"
+            }
+
+            mock_get.return_value = Mock(status=404)
+            mock_get.return_value.json.return_value = weather_coordinates
+
+            response = self.temp.get_weather_by_zip_code_pl("99-999")
+
+            self.assertEqual(response, None)
+
     def tearDown(self):
         self.temp = None
 

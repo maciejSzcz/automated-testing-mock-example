@@ -143,6 +143,11 @@ class TestWeatherApp(TestCase):
 
         self.assertEqual(response, None)
 
+    def test_get_weather_for_cities_by_name_raises_value_error_with_no_args(self):
+        with self.assertRaisesRegexp(ValueError, "Cities must be provided"):
+            self.temp.get_weather_for_cities_by_name()
+
+
     def test_get_weather_by_geo_coordinates_succesful(self):
         with patch('src.weather.weather.requests.get') as mock_get:
             weather_coordinates = {

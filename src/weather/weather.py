@@ -25,7 +25,11 @@ class WeatherApp(object):
 
         res = requests.get(self.base_url + "cities=" + cities_str)
 
-        return res
+
+        if res.status != 200:
+            return None
+        else:
+            return res
 
     def get_weather_by_geo_coordinates(self, lat, lon):
         if type(lat) != float or type(lon) != float:

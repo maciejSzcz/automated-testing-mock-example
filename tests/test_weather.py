@@ -182,7 +182,7 @@ class TestWeatherApp(TestCase):
 
             self.assertTrue(weather_coordinates in response.json())
 
-    def test_get_weather_by_by_zip_code_pl_no_data_for_zip_code(self):
+    def test_get_weather_by_zip_code_pl_no_data_for_zip_code(self):
         with patch('src.weather.weather.requests.get') as mock_get:
             weather_coordinates = {
                 "mesage": "No data found for given zip code"
@@ -194,6 +194,11 @@ class TestWeatherApp(TestCase):
             response = self.temp.get_weather_by_zip_code_pl("99-999")
 
             self.assertEqual(response, None)
+
+    def test_get_weather_by_zip_code_pl_raises_value_error_with_wrong_format(self):
+        with self.assertRaisesRegexp(ValueError, "Zip code must be formated like XX-XXX"):
+            self.temp.get_weather_by_zip_code_pl("1234-39")
+
 
     def tearDown(self):
         self.temp = None

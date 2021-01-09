@@ -97,6 +97,19 @@ class TestWeatherApp(TestCase):
 
         self.assertEqual(response.json(), weather_cities)
 
+    @patch('src.weather.weather.requests.get')
+    def test_get_weather_for_cities_by_name_no_city_valid(self, mock_get):
+        weather_cities = {
+            "message": "Invalid cities"
+        }
+
+        mock_get.return_value = Mock(status=400)
+        mock_get.return_value.json.return_value = weather_cities
+
+        response = self.temp.get_weather_for_cities_by_name("Ugabuga", "Na pewno nie miasto", "Podkarpacie")
+
+        self.assertEqual(response, None)
+
     def test_get_weather_by_geo_coordinates_succesful(self):
         with patch('src.weather.weather.requests.get') as mock_get:
             weather_coordinates = {

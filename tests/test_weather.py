@@ -18,6 +18,21 @@ class TestWeatherApp(TestCase):
 
         self.temp.weather_database.add.assert_called_once()
 
+    @patch('src.weather.weather.requests.get')
+    def test_save_weather_single_city_valueerror_raised_with_404_response(self, mock_get):
+        weather_warsaww = {
+            "message": "Invalid city"
+        }
+
+        mock_get.return_value = Mock(status=404)
+        mock_get.return_value.json.return_value = weather_warsaww
+
+        self.temp.weather_database.add = Mock()
+        self.temp.weather_database.add.side_effect = ValueError("Value can't be none")
+
+        with self.assertRaisesRegexp(ValueError, "Value can't be none"):
+            self.temp.save_weather_single_city("warsaww")
+
     def test_save_weather_single_city_typerror_raised_with_not_str(self):
         self.temp.weather_database.add = Mock()
         with self.assertRaisesRegexp(TypeError, "City name must be of string type"):

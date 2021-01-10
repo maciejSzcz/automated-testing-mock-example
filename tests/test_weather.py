@@ -17,7 +17,8 @@ class TestWeatherApp(TestCase):
                     "city": "Warsaw",
                     "weather": "Rainy",
                     "temperature": "2C",
-                    "wind_dir": "NE"
+                    "wind_dir": "NE",
+                    "date": "2021-01-10"
                 }
             ]
         }
@@ -53,7 +54,8 @@ class TestWeatherApp(TestCase):
                     "city": "Warsaw",
                     "weather": "Rainy",
                     "temperature": "2C",
-                    "wind_dir": "NE"
+                    "wind_dir": "NE",
+                    "date": "2021-01-09"
                 }
             ]
         }
@@ -73,19 +75,22 @@ class TestWeatherApp(TestCase):
                     "city": "Warsaw",
                     "weather": "Rainy",
                     "temperature": "2C",
-                    "wind_dir": "NE"
+                    "wind_dir": "NE",
+                    "date": "2021-01-01"
                 },
                 {
                     "city": "Wroclaw",
                     "weather": "Clear sky",
                     "temperature": "4C",
-                    "wind_dir": "SW"
+                    "wind_dir": "SW",
+                    "date": "2021-01-01"
                 },
                 {
                     "city": "Gdansk",
                     "weather": "Snow storm",
                     "temperature": "-3C",
-                    "wind_dir": "NE"
+                    "wind_dir": "NE",
+                    "date": "2021-01-01"
                 }
             ]
         }
@@ -105,13 +110,15 @@ class TestWeatherApp(TestCase):
                     "city": "Warsaw",
                     "weather": "Rainy",
                     "temperature": "2C",
-                    "wind_dir": "NE"
+                    "wind_dir": "NE",
+                    "date": "2021-01-04"
                 },
                 {
                     "city": "Wroclaw",
                     "weather": "Clear sky",
                     "temperature": "4C",
-                    "wind_dir": "SW"
+                    "wind_dir": "SW",
+                    "date": "2021-01-04"
                 }
             ]
         }
@@ -156,7 +163,8 @@ class TestWeatherApp(TestCase):
                         "city": "Gdansk",
                         "weather": "Broken Clouds",
                         "temperature": "-4C",
-                        "wind_dir": "SW"
+                        "wind_dir": "SW",
+                        "date": "2021-01-11"
                     }
                 ]
             }
@@ -189,7 +197,8 @@ class TestWeatherApp(TestCase):
                         "city": "Gdansk",
                         "weather": "Broken Clouds",
                         "temperature": "-4C",
-                        "wind_dir": "SW"
+                        "wind_dir": "SW",
+                        "date": "2021-01-03"
                     }
                 ]
             }
@@ -221,7 +230,8 @@ class TestWeatherApp(TestCase):
                         "city": "Gizycko",
                         "weather": "Sunny",
                         "temperature": "21C",
-                        "wind_dir": "SW"
+                        "wind_dir": "SW",
+                        "date": "2021-01-04"
                     }
                 ]
             }

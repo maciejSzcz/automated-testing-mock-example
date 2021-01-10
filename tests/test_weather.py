@@ -18,6 +18,12 @@ class TestWeatherApp(TestCase):
 
         self.temp.weather_database.add.assert_called_once()
 
+    def test_save_weather_single_city_typerror_raised_with_not_str(self):
+        self.temp.weather_database.add = Mock()
+        with self.assertRaisesRegexp(TypeError, "City name must be of string type"):
+            self.temp.save_weather_single_city(12+3j)
+
+
     @patch('src.weather.weather.requests.get')
     def test_get_weather_by_city_name_succesful(self, mock_get):
         weather_warsaw = {

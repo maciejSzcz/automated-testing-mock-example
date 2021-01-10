@@ -17,7 +17,7 @@ class WeatherApp(object):
     def save_weather_single_city(self, city_name):
         city = self.get_weather_by_city_name(city_name)
 
-        self.weather_database.add(city)
+        self.__weather_database.add(city)
 
     def get_weather_by_city_name(self, city_name):
         if type(city_name) != str:

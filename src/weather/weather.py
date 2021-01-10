@@ -4,10 +4,20 @@ import re
 class WeatherApp(object):
     def __init__(self, database=None):
         self.__base_url = 'api.myweatherapi.com/v1/'
+        self.__weather_database = database
 
     @property
     def base_url(self):
         return self.__base_url
+
+    @property
+    def weather_database(self):
+        return self.__weather_database
+
+    def save_weather_single_city(self, city_name):
+        city = self.get_weather_by_city_name(city_name)
+
+        self.weather_database.add(city)
 
     def get_weather_by_city_name(self, city_name):
         if type(city_name) != str:
@@ -62,3 +72,5 @@ class WeatherApp(object):
             return None
         else:
             return res
+
+    

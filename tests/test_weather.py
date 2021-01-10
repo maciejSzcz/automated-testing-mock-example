@@ -7,7 +7,16 @@ from src.weather.weather import WeatherApp
 
 class TestWeatherApp(TestCase):
     def setUp(self):
-        self.temp = WeatherApp()
+        fake_database = Mock()
+        self.temp = WeatherApp(fake_database)
+
+    @patch('src.weather.weather.requests.get')
+    def test_while_save_weather_single_city_calls_get_weather_by_city_name(self, mock_get):
+        self.temp.weather_database.add = Mock()
+
+        self.temp.save_weather_single_city("Warsaw")
+
+        self.temp.weather_database.add.assert_called_once()
 
     @patch('src.weather.weather.requests.get')
     def test_get_weather_by_city_name_succesful(self, mock_get):
@@ -18,6 +27,7 @@ class TestWeatherApp(TestCase):
                     "weather": "Rainy",
                     "temperature": "2C",
                     "wind_dir": "NE",
+                    "wind_speed": "21km/h",
                     "date": "2021-01-10"
                 }
             ]
@@ -55,6 +65,7 @@ class TestWeatherApp(TestCase):
                     "weather": "Rainy",
                     "temperature": "2C",
                     "wind_dir": "NE",
+                    "wind_speed": "19km/h",
                     "date": "2021-01-09"
                 }
             ]
@@ -76,6 +87,7 @@ class TestWeatherApp(TestCase):
                     "weather": "Rainy",
                     "temperature": "2C",
                     "wind_dir": "NE",
+                    "wind_speed": "31km/h",
                     "date": "2021-01-01"
                 },
                 {
@@ -83,6 +95,7 @@ class TestWeatherApp(TestCase):
                     "weather": "Clear sky",
                     "temperature": "4C",
                     "wind_dir": "SW",
+                    "wind_speed": "0km/h",
                     "date": "2021-01-01"
                 },
                 {
@@ -90,6 +103,7 @@ class TestWeatherApp(TestCase):
                     "weather": "Snow storm",
                     "temperature": "-3C",
                     "wind_dir": "NE",
+                    "wind_speed": "35km/h",
                     "date": "2021-01-01"
                 }
             ]
@@ -111,6 +125,7 @@ class TestWeatherApp(TestCase):
                     "weather": "Rainy",
                     "temperature": "2C",
                     "wind_dir": "NE",
+                    "wind_speed": "14km/h",
                     "date": "2021-01-04"
                 },
                 {
@@ -118,6 +133,7 @@ class TestWeatherApp(TestCase):
                     "weather": "Clear sky",
                     "temperature": "4C",
                     "wind_dir": "SW",
+                    "wind_speed": "3km/h",
                     "date": "2021-01-04"
                 }
             ]
@@ -164,6 +180,7 @@ class TestWeatherApp(TestCase):
                         "weather": "Broken Clouds",
                         "temperature": "-4C",
                         "wind_dir": "SW",
+                        "wind_speed": "5km/h",
                         "date": "2021-01-11"
                     }
                 ]
@@ -198,6 +215,7 @@ class TestWeatherApp(TestCase):
                         "weather": "Broken Clouds",
                         "temperature": "-4C",
                         "wind_dir": "SW",
+                        "wind_speed": "17km/h",
                         "date": "2021-01-03"
                     }
                 ]
@@ -231,6 +249,7 @@ class TestWeatherApp(TestCase):
                         "weather": "Sunny",
                         "temperature": "21C",
                         "wind_dir": "SW",
+                        "wind_speed": "5km/h",
                         "date": "2021-01-04"
                     }
                 ]

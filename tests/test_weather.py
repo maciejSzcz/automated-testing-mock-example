@@ -100,6 +100,46 @@ class TestWeatherApp(TestCase):
         mock_get.assert_called_once()
 
     @patch('src.weather.weather.requests.get')
+    def test_while_save_weather_multiple_cities_calls_get_weather_for_cities_by_name(self, mock_get):
+        weather_cities = {
+            "data": [
+                {
+                    "city": "Warsaw",
+                    "weather": "Rainy",
+                    "temperature": "2C",
+                    "wind_dir": "NE",
+                    "wind_speed": "31km/h",
+                    "date": "2021-01-01"
+                },
+                {
+                    "city": "Wroclaw",
+                    "weather": "Clear sky",
+                    "temperature": "4C",
+                    "wind_dir": "SW",
+                    "wind_speed": "0km/h",
+                    "date": "2021-01-01"
+                },
+                {
+                    "city": "Gdansk",
+                    "weather": "Snow storm",
+                    "temperature": "-3C",
+                    "wind_dir": "NE",
+                    "wind_speed": "35km/h",
+                    "date": "2021-01-01"
+                }
+            ]
+        }
+
+        mock_get.return_value = Mock(status=200)
+        mock_get.return_value.json.return_value = weather_cities
+
+        self.temp.weather_database.add = Mock()
+
+        self.temp.save_weather_multiple_cities("Warsaw", "Wroclaw", "Gdansk")
+        
+        self.assertEquals(self.temp.weather_database.add.call_count, 3)
+
+    @patch('src.weather.weather.requests.get')
     def test_get_weather_for_cities_by_name_succesful(self, mock_get):
         weather_cities = {
             "data": [

@@ -4,3 +4,9 @@ class WeatherDatabase(object):
 
     def add(self):
         pass
+
+    def find(self):
+        pass
+
+    def delete(self):
+        pass

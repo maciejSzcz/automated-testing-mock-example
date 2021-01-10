@@ -30,6 +30,12 @@ class WeatherApp(object):
         else:
             return res
 
+    def save_weather_multiple_cities(self, *city_names):
+        cities_weather = self.get_weather_for_cities_by_name(*city_names)
+
+        for city in cities_weather.json()["data"]:
+            self.__weather_database.add(city)
+
     def get_weather_for_cities_by_name(self, *city_names):
         if len(city_names) == 0:
             raise ValueError("Cities must be provided")

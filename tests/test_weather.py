@@ -99,6 +99,12 @@ class TestWeatherApp(TestCase):
 
         mock_get.assert_called_once()
 
+    def assertCalledThreeTimesWith(self, mock, data):
+        mock.weather_database.add.assert_any_call(data[0])
+        mock.weather_database.add.assert_any_call(data[1])
+        mock.weather_database.add.assert_any_call(data[2])
+        self.assertEquals(mock.weather_database.add.call_count, 3)
+
     @patch('src.weather.weather.requests.get')
     def test_while_save_weather_multiple_cities_calls_get_weather_for_cities_by_name(self, mock_get):
         weather_cities = {
@@ -137,7 +143,7 @@ class TestWeatherApp(TestCase):
 
         self.temp.save_weather_multiple_cities("Warsaw", "Wroclaw", "Gdansk")
         
-        self.assertEquals(self.temp.weather_database.add.call_count, 3)
+        self.assertCalledThreeTimesWith(self.temp, weather_cities["data"])
 
     @patch('src.weather.weather.requests.get')
     def test_get_weather_for_cities_by_name_succesful(self, mock_get):

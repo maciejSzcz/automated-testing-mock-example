@@ -277,6 +277,10 @@ class TestWeatherApp(TestCase):
         with self.assertRaisesRegexp(ValueError, "Cities must be provided"):
             self.temp.get_weather_for_cities_by_name()
 
+    def test_get_weather_for_cities_by_name_raises_type_error_with_not_str_args(self):
+        with self.assertRaisesRegexp(TypeError, "Cities must be str"):
+            self.temp.get_weather_for_cities_by_name()
+
 
     def test_get_weather_by_geo_coordinates_succesful(self):
         with patch('src.weather.weather.requests.get') as mock_get:

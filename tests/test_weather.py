@@ -11,7 +11,7 @@ class TestWeatherApp(TestCase):
         self.temp = WeatherApp(fake_database)
 
     @patch('src.weather.weather.requests.get')
-    def test_while_save_weather_single_city_calls_get_weather_by_city_name(self, mock_get):
+    def test_while_save_weather_single_city_calls_save_weather_single_city(self, mock_get):
         self.temp.weather_database.add = Mock()
         weather_warsaw = {
             "data": [
@@ -69,6 +69,8 @@ class TestWeatherApp(TestCase):
         mock_get.return_value.json.return_value = weather_warsaww
 
         self.temp.weather_database.add = Mock()
+
+        self.temp.save_weather_single_city("Warsaww")
 
         self.temp.weather_database.add.assert_not_called()
 
@@ -327,6 +329,20 @@ class TestWeatherApp(TestCase):
         self.temp.save_weather_single_city("Warsaw")
 
         self.temp.weather_database.add.assert_called_once()
+
+    @patch('src.weather.weather.requests.get')
+    def test_while_save_weather_geo_coordinates_fails_weather_database_add_not_called(self, mock_get):
+        weather_coordinates = {
+            "mesage": "No data found for given coordinates"
+        }
+
+        mock_get.return_value = Mock(status=404)
+        mock_get.return_value.json.return_value = weather_coordinates
+
+        self.temp.weather_database.add = Mock()
+
+        self.temp.save_weather_geo_coordinates(48.276, -36.945)
+        self.temp.weather_database.add.assert_not_called()
 
     def test_get_weather_by_geo_coordinates_succesful(self):
         with patch('src.weather.weather.requests.get') as mock_get:

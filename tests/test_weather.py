@@ -185,6 +185,10 @@ class TestWeatherApp(TestCase):
         
         self.assertCalledThreeTimesWith(self.temp, weather_cities["data"])
 
+    def test_save_weather_multiple_cities_raises_type_error_with_not_str_args(self):
+        with self.assertRaisesRegexp(TypeError, "Cities must be str"):
+            self.temp.save_weather_multiple_cities(1, 3, 4, "gege")
+
     @patch('src.weather.weather.requests.get')
     def test_get_weather_for_cities_by_name_succesful(self, mock_get):
         weather_cities = {

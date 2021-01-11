@@ -202,8 +202,11 @@ class TestWeatherApp(TestCase):
         with self.assertRaisesRegexp(TypeError, "Cities must be str"):
             self.temp.save_weather_multiple_cities(1, 3, 4, "gege")
 
-    def test_check_not_all_cties_are_str_returns_false_for_not_str_list(self):
+    def test_check_not_all_cities_are_str_returns_true_for_not_str_list(self):
         self.assertEquals(self.temp.check_not_all_cties_are_str([1, "dfd", "paryż"]), True)
+
+    def test_check_not_all_cities_are_str_returns_false_for_str_list(self):
+        self.assertEquals(self.temp.check_not_all_cties_are_str(["Paryż", "Tokio", "paryż"]), False)
 
     @patch('src.weather.weather.requests.get')
     def test_get_weather_for_cities_by_name_succesful(self, mock_get):

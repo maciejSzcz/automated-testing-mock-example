@@ -38,7 +38,7 @@ class WeatherApp(object):
         return type(city) != str
 
     def save_weather_multiple_cities(self, *city_names):
-        if self.checkNotAllCitiesAreStr(city_names):
+        if self.check_not_all_cties_are_str(city_names):
             raise TypeError("Cities must be str")
 
         cities_weather = self.get_weather_for_cities_by_name(*city_names)
@@ -50,7 +50,7 @@ class WeatherApp(object):
     def get_weather_for_cities_by_name(self, *city_names):
         if len(city_names) == 0:
             raise ValueError("Cities must be provided")
-        elif self.checkNotAllCitiesAreStr(city_names):
+        elif self.check_not_all_cties_are_str(city_names):
             raise TypeError("Cities must be str")
 
         cities_str = ','.join(city_names)
@@ -62,7 +62,7 @@ class WeatherApp(object):
         else:
             return res
 
-    def checkNotAllCitiesAreStr(self, city_names):
+    def check_not_all_cties_are_str(self, city_names):
         return not all(type(city) == str for city in city_names)
 
     def get_weather_by_geo_coordinates(self, lat, lon):

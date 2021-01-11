@@ -8,6 +8,7 @@ dist/
 __pycache__/
 *.so
 *~
+.coveralls.yml
 
 # due to using tox and pytest
 .tox

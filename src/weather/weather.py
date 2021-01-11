@@ -66,11 +66,13 @@ class WeatherApp(object):
         return not all(type(city) == str for city in city_names)
 
     def save_weather_geo_coordinates(self, lat, lon):
-        if lat > 90.000 or lat < -90.000:
+        if type(lat) != float or type(lon) != float:
+            raise TypeError("Coordinates must be of float type")
+        elif lat > 90.000 or lat < -90.000:
             raise ValueError("Latitude has to be between -90 and 90")
         elif lon > 180.000 or lon < -180.000:
             raise ValueError("Longitude has to be between -180 and 180")
-        
+
         weather = self.get_weather_by_geo_coordinates(lat, lon)
 
         if weather != None:

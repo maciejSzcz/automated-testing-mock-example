@@ -66,10 +66,10 @@ class WeatherApp(object):
         return not all(type(city) == str for city in city_names)
 
     def save_weather_geo_coordinates(self, lat, lon):
+        weather = self.get_weather_by_geo_coordinates(lat, lon)
 
-        city = self.get_weather_by_geo_coordinates(lat, lon)
-
-        self.__weather_database.add(city.json()["data"])
+        if weather != None:
+            self.__weather_database.add(weather.json()["data"])
 
     def get_weather_by_geo_coordinates(self, lat, lon):
         if type(lat) != float or type(lon) != float:

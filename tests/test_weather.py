@@ -279,7 +279,7 @@ class TestWeatherApp(TestCase):
 
     def test_get_weather_for_cities_by_name_raises_type_error_with_not_str_args(self):
         with self.assertRaisesRegexp(TypeError, "Cities must be str"):
-            self.temp.get_weather_for_cities_by_name()
+            self.temp.get_weather_for_cities_by_name(1, 3, 4, "gege")
 
 
     def test_get_weather_by_geo_coordinates_succesful(self):

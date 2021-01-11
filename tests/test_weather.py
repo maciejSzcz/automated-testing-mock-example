@@ -538,6 +538,28 @@ class TestWeatherApp(TestCase):
             spy_get.assert_called_once_with('api.myweatherapi.com/v1/zip=11-500')
 
     @patch('src.weather.weather.requests.get')
+    def test_get_weather_by_ip_location_autodetect_requests_get_should_be_called(self, mock_get):
+        weather_warsaw = {
+            "data": [
+                {
+                    "city": "Warsaw",
+                    "weather": "Rainy",
+                    "temperature": "2C",
+                    "wind_dir": "NE",
+                    "wind_speed": "19km/h",
+                    "date": "2021-01-09"
+                }
+            ]
+        }
+
+        mock_get.return_value = Mock(status=200)
+        mock_get.return_value.json.return_value = weather_warsaw
+
+        self.temp.get_weather_by_ip_location_autodetect()
+
+        mock_get.assert_called_once()
+
+    @patch('src.weather.weather.requests.get')
     def test_get_weather_by_ip_location_autodetect_succesful(self, mock_get):
         weather_warsaw = {
             "data": [

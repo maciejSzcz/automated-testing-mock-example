@@ -15,12 +15,15 @@ class WeatherApp(object):
         return self.__weather_database
 
     def save_weather_single_city(self, city_name):
+        if self.checkCityIsNotStr(city_name):
+            raise TypeError("City name must be of string type")
+
         city = self.get_weather_by_city_name(city_name)
 
         self.__weather_database.add(city)
 
     def get_weather_by_city_name(self, city_name):
-        if type(city_name) != str:
+        if self.checkCityIsNotStr(city_name):
             raise TypeError("City name must be of string type")
 
         res = requests.get(self.base_url + "city=" + city_name)
@@ -29,6 +32,9 @@ class WeatherApp(object):
             return None
         else:
             return res
+
+    def checkCityIsNotStr(self, city):
+        return type(city) != str
 
     def save_weather_multiple_cities(self, *city_names):
         cities_weather = self.get_weather_for_cities_by_name(*city_names)

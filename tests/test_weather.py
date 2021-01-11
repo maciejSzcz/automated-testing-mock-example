@@ -13,6 +13,21 @@ class TestWeatherApp(TestCase):
     @patch('src.weather.weather.requests.get')
     def test_while_save_weather_single_city_calls_get_weather_by_city_name(self, mock_get):
         self.temp.weather_database.add = Mock()
+        weather_warsaw = {
+            "data": [
+                {
+                    "city": "Warsaw",
+                    "weather": "Rainy",
+                    "temperature": "2C",
+                    "wind_dir": "NE",
+                    "wind_speed": "21km/h",
+                    "date": "2021-01-10"
+                }
+            ]
+        }
+
+        mock_get.return_value = Mock(status=200)
+        mock_get.return_value.json.return_value = weather_warsaw
 
         self.temp.save_weather_single_city("Warsaw")
 

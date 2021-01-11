@@ -305,6 +305,29 @@ class TestWeatherApp(TestCase):
             self.temp.get_weather_for_cities_by_name(1, 3, 4, "gege")
 
 
+    @patch('src.weather.weather.requests.get')
+    def test_while_save_weather_geo_coordinates_calls_weather_database_add(self, mock_get):
+        self.temp.weather_database.add = Mock()
+        weather_warsaw = {
+            "data": [
+                {
+                    "city": "Warsaw",
+                    "weather": "Rainy",
+                    "temperature": "2C",
+                    "wind_dir": "NE",
+                    "wind_speed": "21km/h",
+                    "date": "2021-01-10"
+                }
+            ]
+        }
+
+        mock_get.return_value = Mock(status=200)
+        mock_get.return_value.json.return_value = weather_warsaw
+
+        self.temp.save_weather_single_city("Warsaw")
+
+        self.temp.weather_database.add.assert_called_once()
+
     def test_get_weather_by_geo_coordinates_succesful(self):
         with patch('src.weather.weather.requests.get') as mock_get:
             weather_coordinates = {

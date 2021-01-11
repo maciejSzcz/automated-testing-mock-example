@@ -310,23 +310,23 @@ class TestWeatherApp(TestCase):
     @patch('src.weather.weather.requests.get')
     def test_while_save_weather_geo_coordinates_calls_weather_database_add(self, mock_get):
         self.temp.weather_database.add = Mock()
-        weather_warsaw = {
+        weather_coordinates = {
             "data": [
                 {
-                    "city": "Warsaw",
-                    "weather": "Rainy",
-                    "temperature": "2C",
-                    "wind_dir": "NE",
-                    "wind_speed": "21km/h",
-                    "date": "2021-01-10"
+                    "city": "Gdansk",
+                    "weather": "Broken Clouds",
+                    "temperature": "-4C",
+                    "wind_dir": "SW",
+                    "wind_speed": "5km/h",
+                    "date": "2021-01-11"
                 }
             ]
         }
 
         mock_get.return_value = Mock(status=200)
-        mock_get.return_value.json.return_value = weather_warsaw
+        mock_get.return_value.json.return_value = weather_coordinates
 
-        self.temp.save_weather_single_city("Warsaw")
+        self.temp.save_weather_geo_coordinates(54.396, 18.574)
 
         self.temp.weather_database.add.assert_called_once()
 
@@ -450,6 +450,29 @@ class TestWeatherApp(TestCase):
     def test_get_weather_by_geo_coordinates_coordinates_type_not_float(self):
         with self.assertRaisesRegexp(TypeError, "Coordinates must be of float type"):
             self.temp.get_weather_by_geo_coordinates(110, "123.432")
+
+    @patch('src.weather.weather.requests.get')
+    def test_while_save_weather_zip_code_calls_weather_database_add(self, mock_get):
+        self.temp.weather_database.add = Mock()
+        weather_coordinates = {
+                "data": [
+                    {
+                        "city": "Gizycko",
+                        "weather": "Sunny",
+                        "temperature": "21C",
+                        "wind_dir": "SW",
+                        "wind_speed": "5km/h",
+                        "date": "2021-01-04"
+                    }
+                ]
+            }
+
+        mock_get.return_value = Mock(status=200)
+        mock_get.return_value.json.return_value = weather_coordinates
+
+        self.temp.save_weather_zip_code("11-500")
+
+        self.temp.weather_database.add.assert_called_once()
 
     def test_get_weather_by_zip_code_pl_succesful(self):
         with patch('src.weather.weather.requests.get') as mock_get:

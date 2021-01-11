@@ -183,6 +183,21 @@ class TestWeatherApp(TestCase):
         
         self.assertCalledThreeTimesWith(self.temp, weather_cities["data"])
 
+    @patch('src.weather.weather.requests.get')
+    def test_while_save_weather_multiple_cities_fails_weather_database_add_not_called(self, mock_get):
+        weather_cities = {
+            "message": "Invalid cities"
+        }
+
+        mock_get.return_value = Mock(status=404)
+        mock_get.return_value.json.return_value = weather_cities
+
+        self.temp.weather_database.add = Mock()
+
+        self.temp.save_weather_multiple_cities("Warsaw", "Wroclaw", "Gdansk")
+
+        self.temp.weather_database.add.assert_not_called()
+
     def test_save_weather_multiple_cities_raises_type_error_with_not_str_args(self):
         with self.assertRaisesRegexp(TypeError, "Cities must be str"):
             self.temp.save_weather_multiple_cities(1, 3, 4, "gege")

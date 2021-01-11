@@ -374,6 +374,10 @@ class TestWeatherApp(TestCase):
         with self.assertRaisesRegexp(ValueError, "Latitude has to be between -90 and 90"):
             self.temp.save_weather_geo_coordinates(110.354, 12.453)
 
+    def test_save_weather_geo_coordinates_longitude_out_of_range(self):
+        with self.assertRaisesRegexp(ValueError, "Longitude has to be between -180 and 180"):
+            self.temp.save_weather_geo_coordinates(32.354, -342.532)
+
     def test_get_weather_by_geo_coordinates_succesful(self):
         with patch('src.weather.weather.requests.get') as mock_get:
             weather_coordinates = {

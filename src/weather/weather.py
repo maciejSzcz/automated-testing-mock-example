@@ -45,6 +45,8 @@ class WeatherApp(object):
     def get_weather_for_cities_by_name(self, *city_names):
         if len(city_names) == 0:
             raise ValueError("Cities must be provided")
+        elif not all(type(city) == str for city in city_names):
+            raise TypeError("Cities must be str")
 
         cities_str = ','.join(city_names)
 

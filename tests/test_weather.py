@@ -34,6 +34,32 @@ class TestWeatherApp(TestCase):
         self.temp.weather_database.add.assert_called_once()
 
     @patch('src.weather.weather.requests.get')
+    def test_save_weather_single_city_saves_in_db(self, mock_get):
+        weather_warsaw = {
+            "data": [
+                {
+                    "city": "Warsaw",
+                    "weather": "Rainy",
+                    "temperature": "2C",
+                    "wind_dir": "NE",
+                    "wind_speed": "21km/h",
+                    "date": "2021-01-10"
+                }
+            ]
+        }
+
+        mock_get.return_value = Mock(status=200)
+        mock_get.return_value.json.return_value = weather_warsaw
+
+        self.temp.weather_database.add = Mock()
+        self.temp.weather_database.find = MagicMock()
+        self.temp.weather_database.find.return_value = True
+
+        self.temp.save_weather_single_city("Warsaw")
+
+        self.assertEquals(self.temp.weather_database.find("Warsaw"), True)
+
+    @patch('src.weather.weather.requests.get')
     def test_save_weather_single_city_valueerror_raised_with_404_response(self, mock_get):
         weather_warsaww = {
             "message": "Invalid city"
@@ -52,7 +78,6 @@ class TestWeatherApp(TestCase):
         self.temp.weather_database.add = Mock()
         with self.assertRaisesRegexp(TypeError, "City name must be of string type"):
             self.temp.save_weather_single_city(12+3j)
-
 
     @patch('src.weather.weather.requests.get')
     def test_get_weather_by_city_name_succesful(self, mock_get):

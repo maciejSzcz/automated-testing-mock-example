@@ -560,6 +560,29 @@ class TestWeatherApp(TestCase):
             spy_get.assert_called_once_with('api.myweatherapi.com/v1/zip=11-500')
 
     @patch('src.weather.weather.requests.get')
+    def test_while_save_ip_location_calls_weather_database_add(self, mock_get):
+        self.temp.weather_database.add = Mock()
+        weather_coordinates = {
+                "data": [
+                    {
+                        "city": "Gizycko",
+                        "weather": "Sunny",
+                        "temperature": "21C",
+                        "wind_dir": "SW",
+                        "wind_speed": "5km/h",
+                        "date": "2021-01-04"
+                    }
+                ]
+            }
+
+        mock_get.return_value = Mock(status=200)
+        mock_get.return_value.json.return_value = weather_coordinates
+
+        self.temp.save_weather_ip_location()
+
+        self.temp.weather_database.add.assert_called_once()
+
+    @patch('src.weather.weather.requests.get')
     def test_get_weather_by_ip_location_autodetect_requests_get_should_be_called(self, mock_get):
         weather_warsaw = {
             "data": [
@@ -604,7 +627,7 @@ class TestWeatherApp(TestCase):
         self.assertEqual(response.json(), weather_warsaw)
 
     @patch('src.weather.weather.requests.get')
-    def test_while_get_weather_by_ip_location_autodetect_server_error_returns_none(self, mock_get):
+    def test_get_weather_by_ip_location_autodetect_server_error_returns_none(self, mock_get):
         weather_warsaw = {
             "message": "server error"
         }

@@ -96,7 +96,8 @@ class WeatherApp(object):
     def save_weather_zip_code(self, zip_code):
         weather = self.get_weather_by_zip_code_pl(zip_code)
         
-        self.__weather_database.add(weather.json()["data"])
+        if weather != None:
+            self.__weather_database.add(weather.json()["data"])
 
     def get_weather_by_zip_code_pl(self, zip_code):
         format_regexp = re.compile(r"^[0-9]{2}-[0-9]{3}$")

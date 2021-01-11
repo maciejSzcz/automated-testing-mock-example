@@ -603,6 +603,19 @@ class TestWeatherApp(TestCase):
 
         self.assertEqual(response.json(), weather_warsaw)
 
+    @patch('src.weather.weather.requests.get')
+    def test_while_get_weather_by_ip_location_autodetect_server_error_returns_none(self, mock_get):
+        weather_warsaw = {
+            "message": "server error"
+        }
+
+        mock_get.return_value = Mock(status=500)
+        mock_get.return_value.json.return_value = weather_warsaw
+
+        response = self.temp.get_weather_by_ip_location_autodetect()
+
+        self.assertEqual(response, None)
+
     def tearDown(self):
         self.temp = None
 

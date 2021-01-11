@@ -583,6 +583,21 @@ class TestWeatherApp(TestCase):
         self.temp.weather_database.add.assert_called_once()
 
     @patch('src.weather.weather.requests.get')
+    def test_while_save_weather_ip_location_fails_weather_database_add_not_called(self, mock_get):
+        weather_coordinates = {
+            "mesage": "server error"
+        }
+
+        mock_get.return_value = Mock(status=500)
+        mock_get.return_value.json.return_value = weather_coordinates
+
+        self.temp.weather_database.add = Mock()
+
+        self.temp.save_weather_ip_location()
+
+        self.temp.weather_database.add.assert_not_called()
+
+    @patch('src.weather.weather.requests.get')
     def test_get_weather_by_ip_location_autodetect_requests_get_should_be_called(self, mock_get):
         weather_warsaw = {
             "data": [
@@ -628,12 +643,12 @@ class TestWeatherApp(TestCase):
 
     @patch('src.weather.weather.requests.get')
     def test_get_weather_by_ip_location_autodetect_server_error_returns_none(self, mock_get):
-        weather_warsaw = {
+        weather_location = {
             "message": "server error"
         }
 
         mock_get.return_value = Mock(status=500)
-        mock_get.return_value.json.return_value = weather_warsaw
+        mock_get.return_value.json.return_value = weather_location
 
         response = self.temp.get_weather_by_ip_location_autodetect()
 

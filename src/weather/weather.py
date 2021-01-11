@@ -117,7 +117,8 @@ class WeatherApp(object):
     def save_weather_ip_location(self):
         weather = self.get_weather_by_ip_location_autodetect()
 
-        self.__weather_database.add(weather.json()["data"])
+        if weather != None:
+            self.__weather_database.add(weather.json()["data"])
 
     def get_weather_by_ip_location_autodetect(self):
         res = requests.get(self.base_url + "ip=fetch")

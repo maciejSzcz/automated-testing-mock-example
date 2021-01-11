@@ -20,7 +20,8 @@ class WeatherApp(object):
 
         city = self.get_weather_by_city_name(city_name)
 
-        self.__weather_database.add(city)
+        if city != None:
+            self.__weather_database.add(city.json()["data"])
 
     def get_weather_by_city_name(self, city_name):
         if self.checkCityIsNotStr(city_name):
@@ -39,6 +40,7 @@ class WeatherApp(object):
     def save_weather_multiple_cities(self, *city_names):
         if self.checkNotAllCitiesAreStr(city_names):
             raise TypeError("Cities must be str")
+
         cities_weather = self.get_weather_for_cities_by_name(*city_names)
 
         for city in cities_weather.json()["data"]:

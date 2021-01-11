@@ -117,6 +117,9 @@ class WeatherApp(object):
     def get_weather_by_ip_location_autodetect(self):
         res = requests.get(self.base_url + "ip=fetch")
 
-        return res
+        if res.status != 200:
+            return None
+        else:
+            return res
 
     

@@ -364,11 +364,15 @@ class TestWeatherApp(TestCase):
 
         self.temp.weather_database.add = Mock()
         self.temp.weather_database.find = MagicMock()
-        self.temp.weather_database.find.return_value = True
+        self.temp.weather_database.find.return_value = weather_coordinates["data"]
 
         self.temp.save_weather_geo_coordinates(54.396, 18.574)
 
-        self.assertEquals(self.temp.weather_database.find("Gdansk"), True)
+        self.assertEquals(self.temp.weather_database.find("Gdansk"), weather_coordinates["data"])
+
+    def test_save_weather_geo_coordinates_latitude_out_of_range(self):
+        with self.assertRaisesRegexp(ValueError, "Latitude has to be between -90 and 90"):
+            self.temp.save_weather_geo_coordinates(110.354, 12.453)
 
     def test_get_weather_by_geo_coordinates_succesful(self):
         with patch('src.weather.weather.requests.get') as mock_get:

@@ -43,8 +43,9 @@ class WeatherApp(object):
 
         cities_weather = self.get_weather_for_cities_by_name(*city_names)
 
-        for city in cities_weather.json()["data"]:
-            self.__weather_database.add(city)
+        if cities_weather != None:
+            for city in cities_weather.json()["data"]:
+                self.__weather_database.add(city)
 
     def get_weather_for_cities_by_name(self, *city_names):
         if len(city_names) == 0:

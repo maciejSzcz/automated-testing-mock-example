@@ -344,6 +344,32 @@ class TestWeatherApp(TestCase):
         self.temp.save_weather_geo_coordinates(48.276, -36.945)
         self.temp.weather_database.add.assert_not_called()
 
+    @patch('src.weather.weather.requests.get')
+    def test_save_weather_geo_coordinates_saves_in_db(self, mock_get):
+        weather_coordinates = {
+            "data": [
+                {
+                    "city": "Gdansk",
+                    "weather": "Broken Clouds",
+                    "temperature": "-4C",
+                    "wind_dir": "SW",
+                    "wind_speed": "5km/h",
+                    "date": "2021-01-11"
+                }
+            ]
+        }
+
+        mock_get.return_value = Mock(status=200)
+        mock_get.return_value.json.return_value = weather_coordinates
+
+        self.temp.weather_database.add = Mock()
+        self.temp.weather_database.find = MagicMock()
+        self.temp.weather_database.find.return_value = True
+
+        self.temp.save_weather_geo_coordinates(54.396, 18.574)
+
+        self.assertEquals(self.temp.weather_database.find("Gdansk"), True)
+
     def test_get_weather_by_geo_coordinates_succesful(self):
         with patch('src.weather.weather.requests.get') as mock_get:
             weather_coordinates = {

@@ -380,7 +380,7 @@ class TestWeatherApp(TestCase):
 
     def test_save_weather_geo_coordinates_coordinates_type_not_float(self):
         with self.assertRaisesRegexp(TypeError, "Coordinates must be of float type"):
-            self.temp.get_weather_by_geo_coordinates(110, "123.432")
+            self.temp.save_weather_geo_coordinates(110, "123.432")
 
     def test_get_weather_by_geo_coordinates_succesful(self):
         with patch('src.weather.weather.requests.get') as mock_get:

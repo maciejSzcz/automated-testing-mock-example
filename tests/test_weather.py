@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch, MagicMock
 import unittest
 
 from src.weather.weather import WeatherApp
-from .fake_database import FakeDatabase
+from tests.fake_database import FakeDatabase
 
 class TestWeatherApp(TestCase):
     def setUp(self):

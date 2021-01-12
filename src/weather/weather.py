@@ -131,6 +131,9 @@ class WeatherApp(object):
     def get_random_cities_weather(self):
         res = requests.get(self.base_url + "random")
 
-        return res
+        if res.status != 200:
+            return None
+        else:
+            return res
 
     

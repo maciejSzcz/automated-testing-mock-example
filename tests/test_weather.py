@@ -654,6 +654,28 @@ class TestWeatherApp(TestCase):
 
         self.assertEqual(response, None)
 
+    @patch('src.weather.weather.requests.get')
+    def test_get_random_cities_weather_requests_get_should_be_called(self, mock_get):
+        weather_random = {
+            "data": [
+                {
+                    "city": "Racibórz",
+                    "weather": "Snowy",
+                    "temperature": "-5C",
+                    "wind_dir": "NE",
+                    "wind_speed": "21km/h",
+                    "date": "2021-01-12"
+                }
+            ]
+        }
+
+        mock_get.return_value = Mock(status=200)
+        mock_get.return_value.json.return_value = weather_random
+
+        self.temp.get_weather_by_ip_location_autodetect()
+
+        mock_get.assert_called_once()
+
     def tearDown(self):
         self.temp = None
 

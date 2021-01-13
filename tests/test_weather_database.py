@@ -25,6 +25,14 @@ class TestWeatherApp(TestCase):
 
         self.temp.client.db.insert_one.assert_called_once()
 
+    def test_find_calls_mongo_find_one(self):
+        self.temp.client.db.find_one = Mock()
+
+        self.temp.find({
+            "city": "Warsaw"
+        })
+
+        self.temp.client.db.find_one.assert_called_once()
 
     def tearDown(self):
         self.temp = None

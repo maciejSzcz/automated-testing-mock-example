@@ -25,6 +25,25 @@ class TestWeatherApp(TestCase):
 
         self.temp.client.db.insert_one.assert_called_once()
 
+    def test_add_inserts_weather_to_mongo_db(self):
+        self.temp.client.db.insert_one = Mock()
+        self.temp.find = Mock()
+
+        data = {
+            "city": "Warsaw",
+            "weather": "Rainy",
+            "temperature": "2C",
+            "wind_dir": "NE",
+            "wind_speed": "21km/h",
+            "date": "2021-01-10"
+        }
+
+        self.temp.find.return_value = data
+
+        self.temp.add(data)
+
+        self.assertDictEqual(data, self.temp.find("Warsaw"))
+
     def test_find_calls_mongo_find_one(self):
         self.temp.client.db.find_one = Mock()
 

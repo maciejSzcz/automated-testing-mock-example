@@ -6,7 +6,10 @@ class WeatherDatabase(object):
         self.db = self.client.db
 
     def add(self, weather):
-        result = self.db.insert_one(weather)
+        try:
+            result = self.db.insert_one(weather)
+        except ValueError:
+            print("Couldn't insert into mongodb")
         return result
 
     def find(self, city_name):
@@ -14,5 +17,4 @@ class WeatherDatabase(object):
         return result
 
     def delete(self, city_name):
-        result = self.db.delete_one({"city": city_name})
-        return result
+        self.db.delete_one({"city": city_name})

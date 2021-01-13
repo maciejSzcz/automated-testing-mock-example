@@ -133,8 +133,8 @@ class WeatherApp(object):
 
     def save_random_cities_weather(self):
         weather = self.get_random_cities_weather()
-
-        self.__weather_database.add(weather.json()["data"])
+        if weather != None:
+            self.__weather_database.add(weather.json()["data"])
 
     def get_random_cities_weather(self):
         res = requests.get(self.base_url + "random")

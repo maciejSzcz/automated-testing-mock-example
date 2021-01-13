@@ -599,7 +599,7 @@ class TestWeatherApp(TestCase):
     @patch('src.weather.weather.requests.get')
     def test_while_save_weather_ip_location_fails_weather_database_add_not_called(self, mock_get):
         weather_coordinates = {
-            "mesage": "server error"
+            "message": "server error"
         }
 
         mock_get.return_value = Mock(status=500)
@@ -690,6 +690,22 @@ class TestWeatherApp(TestCase):
         self.temp.save_random_cities_weather()
 
         self.temp.weather_database.add.assert_called_once()
+
+    @patch('src.weather.weather.requests.get')
+    def test_while_save_random_cities_weather_fails_weather_database_add_not_called(self, mock_get):
+        self.temp.weather_database.add = Mock()
+
+        weather_random = {
+            "message": "server error"
+        }
+
+        mock_get.return_value = Mock(status=500)
+        mock_get.return_value.json.return_value = weather_random
+
+
+        self.temp.save_random_cities_weather()
+
+        self.temp.weather_database.add.assert_not_called()
 
     @patch('src.weather.weather.requests.get')
     def test_get_random_cities_weather_requests_get_should_be_called(self, mock_get):

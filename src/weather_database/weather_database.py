@@ -8,8 +8,8 @@ class WeatherDatabase(object):
     def add(self, weather):
         try:
             result = self.db.insert_one(weather)
-        except ValueError:
-            print("Couldn't insert into mongodb")
+        except:
+            result = "Couldn't insert into mongodb"
         return result
 
     def find(self, city_name):

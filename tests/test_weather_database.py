@@ -44,6 +44,24 @@ class TestWeatherApp(TestCase):
 
         self.assertDictEqual(data, self.temp.find("Warsaw"))
 
+    def test_add_returns_error_message_when_error_raised(self):
+        self.temp.client.db.insert_one = Mock()
+        self.temp.client.db.insert_one.side_effect = ConnectionError("error connecting to mongodb")
+
+        data = {
+            "city": "Warsaw",
+            "weather": "Rainy",
+            "temperature": "2C",
+            "wind_dir": "NE",
+            "wind_speed": "21km/h",
+            "date": "2021-01-10"
+        }
+
+
+        self.temp.add(data)
+
+        self.assertEquals(self.temp.add("data"), "Couldn't insert into mongodb")
+
     def test_find_calls_mongo_find_one(self):
         self.temp.client.db.find_one = Mock()
 

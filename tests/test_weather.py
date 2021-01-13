@@ -10,6 +10,13 @@ class TestWeatherApp(TestCase):
         fake_database = FakeDatabase()
         self.temp = WeatherApp(fake_database)
 
+    def test_while_delete_saved_weather_by_city_calls_calls_db_delete(self):
+        self.temp.weather_database.delete = Mock()
+
+        self.temp.delete_saved_weather_by_city("Warsaw")
+
+        self.temp.weather_database.delete.assert_called_once_with("Warsaw")
+
     @patch('src.weather.weather.requests.get')
     def test_while_save_weather_single_city_calls_save_weather_single_city(self, mock_get):
         self.temp.weather_database.add = Mock()

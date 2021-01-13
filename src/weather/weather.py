@@ -14,6 +14,12 @@ class WeatherApp(object):
     def weather_database(self):
         return self.__weather_database
 
+    def delete_saved_weather_by_city(self, city_name):
+        self.__weather_database.delete(city_name)
+
+    def get_saved_weather_by_city(self, city_name):
+        self.__weather_database.find(city_name)
+
     def save_weather_single_city(self, city_name):
         if self.check_city_is_not_str(city_name):
             raise TypeError("City name must be of string type")

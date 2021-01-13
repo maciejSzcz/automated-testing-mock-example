@@ -8,3 +8,7 @@ class WeatherDatabase(object):
     def add(self, weather):
         result = self.db.insert_one(weather)
         return result
+
+    def find(self, city_name):
+        result = self.db.find_one({"city": city_name})
+        return result

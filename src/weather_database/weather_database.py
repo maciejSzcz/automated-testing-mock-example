@@ -12,3 +12,7 @@ class WeatherDatabase(object):
     def find(self, city_name):
         result = self.db.find_one({"city": city_name})
         return result
+
+    def delete(self, city_name):
+        result = self.db.delete_one({"city": city_name})
+        return result

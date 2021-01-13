@@ -37,7 +37,7 @@ class TestWeatherApp(TestCase):
     def test_delete_calls_mongo_delete_one(self):
         self.temp.client.db.delete_one = Mock()
 
-        self.temp.find({
+        self.temp.delete({
             "city": "Warsaw"
         })
 

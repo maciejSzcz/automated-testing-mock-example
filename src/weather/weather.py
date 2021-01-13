@@ -17,9 +17,6 @@ class WeatherApp(object):
     def delete_saved_weather_by_city(self, city_name):
         self.__weather_database.delete(city_name)
 
-    def get_saved_weather_by_city(self, city_name):
-        self.__weather_database.find(city_name)
-
     def save_weather_single_city(self, city_name):
         if self.check_city_is_not_str(city_name):
             raise TypeError("City name must be of string type")
@@ -133,6 +130,11 @@ class WeatherApp(object):
             return None
         else:
             return res
+
+    def save_random_cities_weather(self):
+        weather = self.get_random_cities_weather()
+
+        self.__weather_database.add(weather.json()["data"])
 
     def get_random_cities_weather(self):
         res = requests.get(self.base_url + "random")

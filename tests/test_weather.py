@@ -24,8 +24,6 @@ class TestWeatherApp(TestCase):
         with self.assertRaisesRegex(ValueError, "city not in database"):
             self.temp.delete_saved_weather_by_city("Warsaw")
 
-        
-
     @patch('src.weather.weather.requests.get')
     def test_while_save_weather_single_city_calls_save_weather_single_city(self, mock_get):
         self.temp.weather_database.add = Mock()
@@ -669,6 +667,29 @@ class TestWeatherApp(TestCase):
         response = self.temp.get_weather_by_ip_location_autodetect()
 
         self.assertEqual(response, None)
+
+    @patch('src.weather.weather.requests.get')
+    def test_while_save_random_cities_weather_calls_weather_database_add(self, mock_get):
+        self.temp.weather_database.add = Mock()
+        weather_random = {
+            "data": [
+                {
+                    "city": "Racibórz",
+                    "weather": "Snowy",
+                    "temperature": "-5C",
+                    "wind_dir": "NE",
+                    "wind_speed": "21km/h",
+                    "date": "2021-01-12"
+                }
+            ]
+        }
+
+        mock_get.return_value = Mock(status=200)
+        mock_get.return_value.json.return_value = weather_random
+
+        self.temp.save_random_cities_weather()
+
+        self.temp.weather_database.add.assert_called_once()
 
     @patch('src.weather.weather.requests.get')
     def test_get_random_cities_weather_requests_get_should_be_called(self, mock_get):

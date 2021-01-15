@@ -22,5 +22,6 @@ class WeatherDatabase(object):
     def delete(self, city_name):
         try:
             self.db.delete_one({"city": city_name})
+            return "Successfully deleted from mongodb"
         except:
             return "Couldn't delete from mongodb"

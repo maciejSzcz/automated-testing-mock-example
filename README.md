@@ -1,6 +1,6 @@
 # A mock testing project using Python
 
-![Python package](https://github.com/TestowanieAutomatyczneUG/projekt2-maciejSzcz/workflows/Python%20package/badge.svg)
+![Python setup.py test](https://github.com/TestowanieAutomatyczneUG/projekt2-maciejSzcz/workflows/Python%20setup.py%20test/badge.svg)
 
 ![coverage report](https://i.postimg.cc/pdw2JSyc/obrazek123.jpg)
 

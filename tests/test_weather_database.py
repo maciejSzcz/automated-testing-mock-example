@@ -58,8 +58,6 @@ class TestWeatherApp(TestCase):
         }
 
 
-        self.temp.add(data)
-
         self.assertEquals(self.temp.add("data"), "Couldn't insert into mongodb")
 
     def test_add_doesnt_returns_data_when_error_raised(self):
@@ -82,15 +80,13 @@ class TestWeatherApp(TestCase):
     def test_find_calls_mongo_find_one(self):
         self.temp.client.db.find_one = Mock()
 
-        self.temp.find({
-            "city": "Warsaw"
-        })
+        self.temp.find("Warsaw")
 
         self.temp.client.db.find_one.assert_called_once()
 
     def test_find_returns_weather_from_mongo_db(self):
+        self.temp.client.db.find_one = Mock()
         self.temp.add = Mock()
-        self.temp.find = Mock()
 
         data = {
             "city": "Warsaw",
@@ -102,16 +98,25 @@ class TestWeatherApp(TestCase):
         }
 
         self.temp.add(data)
+        self.temp.client.db.find_one.return_value = data
+
+        self.temp.find("Warsaw")
+
+
+        self.temp.add(data)
+
+        
+        self.assertDictEqual(data, self.temp.find("Warsaw"))
+
+    def test_find_returns_error_message_when_error_raised(self):
+        self.temp.client.db.find_one = MagicMock()
+        self.temp.client.db.find_one.side_effect = ConnectionError("error connecting to mongodb")
 
         self.temp.find({
             "city": "Warsaw"
         })
 
-        self.temp.find.return_value = data
-
-        self.temp.add(data)
-
-        self.assertDictEqual(data, self.temp.find("Warsaw"))
+        self.assertEquals(self.temp.find("Warsaw"), "Couldn't insert into mongodb")
 
     def test_delete_calls_mongo_delete_one(self):
         self.temp.client.db.delete_one = Mock()

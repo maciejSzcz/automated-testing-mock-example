@@ -112,7 +112,7 @@ class TestWeatherApp(TestCase):
         self.temp.client.db.find_one = MagicMock()
         self.temp.client.db.find_one.side_effect = ConnectionError("error connecting to mongodb")
 
-        self.assertEquals(self.temp.find("Warsaw"), "Couldn't insert into mongodb")
+        self.assertEquals(self.temp.find("Warsaw"), "Couldn't query mongodb")
 
     def test_find_doesnt_return_data_when_error_raised(self):
         self.temp.client.db.find_one = MagicMock()
@@ -157,6 +157,12 @@ class TestWeatherApp(TestCase):
         self.temp.delete("Warsaw")
 
         self.assertIsNone(self.temp.find("Warsaw"))
+
+    def test_delete_returns_error_message_when_error_raised(self):
+        self.temp.client.db.delete_one = Mock()
+        self.temp.client.db.delete_one.side_effect = ConnectionError("error connecting to mongodb")
+
+        self.assertEquals(self.temp.delete("Warsaw"), "Couldn't delete from mongodb")
 
     def tearDown(self):
         self.temp = None

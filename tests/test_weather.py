@@ -17,25 +17,19 @@ class TestWeatherApp(TestCase):
 
         self.temp.weather_database.delete.assert_called_once_with("Warsaw")
 
-    def test_while_delete_saved_weather_by_city_calls_db_find(self):
-        self.temp.weather_database.find = Mock()
-
-        self.temp.delete_saved_weather_by_city("Warsaw")
-
-        self.temp.weather_database.find.assert_called_once_with("Warsaw")
-
-    def test_delete_saved_weather_by_city_returns_message_when_weather_not_in_db(self):
-        self.temp.weather_database.find = Mock()
-        self.temp.weather_database.find.return_value = []
-
-        self.assertEquals(self.temp.delete_saved_weather_by_city("Warsaw"), "Warsaw not in database")
-
     def test_delete_saved_weather_by_city_raises_error_with_city_not_in_db(self):
         self.temp.weather_database.delete = Mock()
         self.temp.weather_database.delete.side_effect = ValueError("city not in database")
 
         with self.assertRaisesRegex(ValueError, "city not in database"):
             self.temp.delete_saved_weather_by_city("Warsaw")
+
+    def test_while_get_saved_weather_by_city_calls_db_find(self):
+        self.temp.weather_database.find = Mock()
+
+        self.temp.get_saved_weather_by_city("Warsaw")
+
+        self.temp.weather_database.find.assert_called_once_with("Warsaw")
 
     @patch('src.weather.weather.requests.get')
     def test_while_save_weather_single_city_calls_save_weather_single_city(self, mock_get):

@@ -13,7 +13,10 @@ class WeatherDatabase(object):
         return result
 
     def find(self, city_name):
-        result = self.db.find_one({"city": city_name})
+        try:
+            result = self.db.find_one({"city": city_name})
+        except:
+            result = "Couldn't insert into mongodb"
         return result
 
     def delete(self, city_name):

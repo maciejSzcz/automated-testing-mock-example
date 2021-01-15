@@ -132,11 +132,31 @@ class TestWeatherApp(TestCase):
     def test_delete_calls_mongo_delete_one(self):
         self.temp.client.db.delete_one = Mock()
 
-        self.temp.delete({
-            "city": "Warsaw"
-        })
+        self.temp.delete("Warsaw")
 
         self.temp.client.db.delete_one.assert_called_once()
+
+    def test_delete_deletes_weather_from_mongo_db(self):
+        self.temp.client.db.delete_one = Mock()
+        self.temp.add = MagicMock()
+        self.temp.find = MagicMock()
+        self.temp.find.return_value = None
+
+        data = {
+            "city": "Warsaw",
+            "weather": "Rainy",
+            "temperature": "2C",
+            "wind_dir": "NE",
+            "wind_speed": "21km/h",
+            "date": "2021-01-10"
+        }
+
+        self.temp.add(data)
+
+
+        self.temp.delete("Warsaw")
+
+        self.assertIsNone(self.temp.find("Warsaw"))
 
     def tearDown(self):
         self.temp = None

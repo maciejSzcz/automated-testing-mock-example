@@ -17,6 +17,13 @@ class TestWeatherApp(TestCase):
 
         self.temp.weather_database.delete.assert_called_once_with("Warsaw")
 
+    def test_while_delete_saved_weather_by_city_calls_calls_db_find(self):
+        self.temp.weather_database.find = Mock()
+
+        self.temp.delete_saved_weather_by_city("Warsaw")
+
+        self.temp.weather_database.find.assert_called_once_with("Warsaw")
+
     def test_delete_saved_weather_by_city_raises_error_with_city_not_in_db(self):
         self.temp.weather_database.delete = Mock()
         self.temp.weather_database.delete.side_effect = ValueError("city not in database")

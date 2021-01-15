@@ -1,4 +1,4 @@
-name: Python package
+name: Python setup.py test
 
 on: 
   push:
@@ -31,5 +31,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        nosetests --with-coverage
         python setup.py test
+    - name: Test with nosetests
+      run: |
+        nosetests

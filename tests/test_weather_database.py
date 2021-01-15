@@ -136,6 +136,11 @@ class TestWeatherApp(TestCase):
 
         self.temp.client.db.delete_one.assert_called_once()
 
+    def test_delete_returns_message_when_successful(self):
+        self.temp.client.db.delete_one = Mock()
+
+        self.assertEquals(self.temp.delete("Warsaw"), "Successfully deleted from mongodb")
+
     def test_delete_deletes_weather_from_mongo_db(self):
         self.temp.client.db.delete_one = Mock()
         self.temp.add = MagicMock()
